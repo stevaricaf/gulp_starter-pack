@@ -1,0 +1,39 @@
+@font-face {
+	font-family: "font-flat";
+	src: url('../../../assets/fonts/dist/font-flat.woff') format('woff'),
+         url('../../../assets/fonts/dist/font-flat.woff2') format('woff2'),
+		 url('../../../assets/fonts/dist/font-flat.ttf') format('truetype');
+}
+
+@mixin font-styles {
+	font-family: "font-flat";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; // only necessary if not using the private unicode range (firstGlyph option)
+	text-decoration: none;
+	text-transform: none;
+}
+
+%font {
+	@include font-styles;
+}
+
+@function font-char($filename) {
+	$char: "";
+
+	@return $char;
+}
+
+@mixin font($filename, $insert: before, $extend: true) {
+	&:#{$insert} {
+		@if $extend {
+			@extend %font;
+		} @else {
+			@include font-styles;
+		}
+		content: font-char($filename);
+    }
+}
