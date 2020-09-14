@@ -28,7 +28,9 @@
   "homepage": "https://github.com/stevaricaf/gulp_starter-pack#readme",
   "dependencies": {
     "@babel/core": "^7.11.6",
+    "autoprefixer": "^9.8.6",
     "browserify": "^16.5.2",
+    "cssnano": "^4.1.10",
     "dustjs-linkedin": "^2.7.5",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
@@ -38,9 +40,12 @@
     "gulp-html-beautify": "^1.0.1",
     "gulp-notify": "^3.2.0",
     "gulp-plumber": "^1.2.1",
+    "gulp-postcss": "^8.0.0",
     "gulp-rename": "^2.0.0",
+    "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify-es": "^2.0.0",
+    "postcss-flexbugs-fixes": "^4.2.1",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   }

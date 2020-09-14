@@ -12,6 +12,11 @@ let {
     dustJs          = require('dustjs-linkedin'),
     dustHtml        = require('gulp-dust-html'),
     htmlBeautify    = require('gulp-html-beautify'),
+    sass            = require('gulp-sass'),
+    postcss         = require('gulp-postcss'),
+    autoprefixer    = require('autoprefixer'),
+    flexbugsFixes   = require('postcss-flexbugs-fixes'),
+    cssnano         = require('cssnano'),
     rename          = require('gulp-rename'),
     notify          = require('gulp-notify'),
     plumber         = require('gulp-plumber'),
@@ -29,19 +34,24 @@ let {
 let paths = {
     // HTML templates
     html: {
-        dir: './templates/pages/',
+        dir:  './templates/pages/',
         dest: './'
+    },
+    // Styles
+    styles: {
+        dir:  './scss/',
+        dest: './src/css/',
     },
     // JavaScript
     js: {
-        dir: './js/',
+        dir:  './js/',
         dest: './src/js/'
     }
 };
 
 // ---------- Error notification ---------- //
 
-const errorNotification = {
+let errorNotification = {
     errorHandler: notify.onError({
         title: "Ops, you've made a mistake, find it...",
         message: 'Error: <%= error.message %>'
@@ -71,6 +81,40 @@ function htmlTask() {
         .pipe(dest(paths.html.dest))
 };
 
+// ---------- SASS copmpiler task ---------- //
+
+let plugins = [
+    autoprefixer({
+        overrideBrowserslist: ['last 2 versions', 'ios >= 8']
+    }),
+    flexbugsFixes({
+        bug4: true,
+        bug6: true,
+        bug81a: true
+    }),
+];
+
+function stylesTask() {
+    return src(paths.styles.dir + '**/*.s+(c|a)ss')
+        .pipe(plumber(errorNotification))
+        .pipe(sourcemaps.init())
+        .pipe(sass({
+            outputStyle: 'expanded',
+            indentWidth: 4,
+            precision: 3
+        }))
+        .pipe(postcss(plugins))
+        .pipe(dest(paths.styles.dest))
+        .pipe(rename({ 
+            suffix: '.min'
+        }))
+        .pipe(postcss([
+            cssnano
+        ]))
+        .pipe(sourcemaps.write('.'))
+        .pipe(dest(paths.styles.dest + 'dist'))
+};
+
 // ---------- JavaScript tasks ---------- //
 
 function jsMainTask() {
@@ -85,7 +129,7 @@ function jsMainTask() {
 };
 
 function jsLibsTask() {
-    return src(paths.js.dest + 'libs/**/*.js')
+    return src(paths.js.dir + 'libs/**/*.js')
         .pipe(concat('libs.js'))
         .pipe(dest(paths.js.dest))
 };
@@ -119,22 +163,27 @@ function jsCleanTask() {
 function watchTask() {
     // Watch HTML files
     watch([paths.html.dir + '**/*.html', '!templates/*.html'], htmlTask);
+    // Watch SCSS files
+    watch(paths.styles.dir + '**/*.s+(c|a)ss', stylesBuild);
     // Watch JS files
     watch([paths.js.dir + '**/*.js', !paths.js.dir + 'libs/**/*.js'], jsBuild);
 };
 
 // ---------- Define complex tasks ---------- //
 
+let stylesBuild = series(stylesTask);
 let jsBuild     = series(jsMainTask, jsLibsTask, jsMergeTask, jsCleanTask);
-let build       = series(parallel(htmlTask, jsBuild), watchTask);
+let build       = series(parallel(htmlTask, stylesBuild, jsBuild), watchTask);
 
 // ---------- Exports tasks ---------- //
 
 exports.html        = htmlTask;
+exports.styles      = stylesTask;
 exports.jsMain      = jsMainTask;
 exports.jsLibs      = jsLibsTask;
 exports.jsMerge     = jsMergeTask;
 exports.jsClean     = jsCleanTask;
 exports.watch       = watchTask;
+exports.stylesBuild = stylesBuild;
 exports.jsBuild     = jsBuild;
 exports.default     = build;
