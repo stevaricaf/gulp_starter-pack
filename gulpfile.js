@@ -235,6 +235,7 @@ let build       = series(parallel(htmlTask, stylesBuild, jsBuild), watchTask);
 
 // ---------- Exports tasks ---------- //
 
+exports.iconfont    = iconfontTask;
 exports.html        = htmlTask;
 exports.styles      = stylesTask;
 exports.sassLint    = sassLintTask;
