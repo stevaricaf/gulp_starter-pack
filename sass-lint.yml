@@ -7,6 +7,7 @@ ignore:
     - 'scss/base/_reset.scss'
     - 'scss/base/_typography.scss'
     - 'scss/fonts/_fonts.scss'
+    - 'scss/fonts/_iconfont.scss'
     - 'scss/helpers/_helpers.scss'
     - 'scss/helpers/_mixins.scss'
     - 'scss/helpers/_variables.scss'
