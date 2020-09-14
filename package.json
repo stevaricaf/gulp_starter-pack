@@ -1,0 +1,29 @@
+{
+  "name": "gulp_starter-pack",
+  "version": "1.0.0",
+  "description": "Gulp starter pack",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevaricaf/gulp_starter-pack.git"
+  },
+  "keywords": [
+    "html",
+    "css",
+    "scss",
+    "sass",
+    "js",
+    "jquery",
+    "gulp",
+    "npm"
+  ],
+  "author": "Stevan Stojić",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stevaricaf/gulp_starter-pack/issues"
+  },
+  "homepage": "https://github.com/stevaricaf/gulp_starter-pack#readme"
+}
