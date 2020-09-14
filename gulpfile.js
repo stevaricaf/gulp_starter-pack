@@ -16,7 +16,7 @@ let {
 // ---------- Initializing file destinations ---------- //
 
 let paths = {
-    // Html templates
+    // HTML templates
     templates: {
         dir: './templates/pages/',
         dest: './'
@@ -46,11 +46,19 @@ function htmlTask() {
         .pipe(dest(paths.templates.dest))
 };
 
+// ---------- Define watch tasks ---------- //
+
+function watchTask() {
+    // Watch HTML files
+    watch([paths.templates.dir + '**/*.html', '!templates/*.html'], htmlTask);
+};
+
 // ---------- Define complex tasks ---------- //
 
-let build = htmlTask;
+let build = series(htmlTask, watchTask);
 
 // ---------- Exports tasks ---------- //
 
 exports.html        = htmlTask;
+exports.watch       = watchTask;
 exports.default     = build;
