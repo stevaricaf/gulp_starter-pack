@@ -61,6 +61,14 @@ let paths = {
     js: {
         dir:  'js/',
         dest: 'src/js/'
+    },
+    // Production
+    prod: {
+        dirAssets:  'assets/',
+        dirHtml: './',
+        dirCss:  'src/css/dist/',
+        dirJs:   'src/js/dist/',
+        dest:    'public_prod/'
     }
 };
 
@@ -186,7 +194,7 @@ function stylesTask() {
             cssnano
         ]))
         .pipe(sourcemaps.write('.'))
-        .pipe(dest(paths.styles.dest + 'dist'))
+        .pipe(dest(paths.styles.dest + 'dist/'))
 };
 
 // ---------- Lint script task ---------- //
@@ -232,7 +240,7 @@ function jsMergeTask() {
         }))
         .pipe(uglify())
         .pipe(sourcemaps.write('.'))
-        .pipe(dest(paths.js.dest + 'dist'))
+        .pipe(dest(paths.js.dest + 'dist/'))
 };
 
 function jsCleanTask() {
@@ -254,13 +262,40 @@ function watchTask() {
     watch([paths.js.dir + '**/*.js', !paths.js.dir + 'libs/**/*.js'], jsBuild);
 };
 
+// ---------- Production build ---------- //
+
+function assetsProdTask() {
+    return src(paths.prod.dirAssets + '**/*')
+        .pipe(dest(paths.prod.dest + 'assets/'))
+};
+
+function htmlProdTask() {
+    return src([
+        paths.prod.dirHtml + '**/*.html',
+        '!templates/**/*.html',
+        '!node_modules/**/*.html'
+    ])
+        .pipe(dest(paths.prod.dest))
+};
+
+function stylesProdTask() {
+    return src(paths.prod.dirCss + 'styles.min.css')
+        .pipe(dest(paths.prod.dest + 'src/css/'))
+};
+
+function jsProdTask() {
+    return src(paths.prod.dirJs + 'global.min.js')
+        .pipe(dest(paths.prod.dest + 'src/js/'))
+};
+
 // ---------- Define complex tasks ---------- //
 
 let stylesBuild = series(stylesTask, sassLintTask);
 let jsBuild     = series(jsMainTask, jsLibsTask, jsMergeTask, jsCleanTask);
-let build       = series(parallel(htmlTask, stylesBuild, jsBuild), watchTask);
+let devBuild    = series(parallel(htmlTask, stylesBuild, jsBuild), watchTask);
+let prodBuild   = parallel(assetsProdTask, htmlProdTask, stylesProdTask, jsProdTask);
 
-// ---------- Exports tasks ---------- //
+// ---------- Exports developer tasks ---------- //
 
 exports.iconfont    = iconfontTask;
 exports.imgmin      = imgminTask;
@@ -274,4 +309,12 @@ exports.jsClean     = jsCleanTask;
 exports.watch       = watchTask;
 exports.stylesBuild = stylesBuild;
 exports.jsBuild     = jsBuild;
-exports.default     = build;
+exports.default     = devBuild;
+
+// ---------- Exports production tasks ---------- //
+
+exports.prodAssets  = assetsProdTask;
+exports.prodHtml    = htmlProdTask;
+exports.prodStyles  = stylesProdTask;
+exports.prodJs      = jsProdTask;
+exports.prodBuild   = prodBuild;
