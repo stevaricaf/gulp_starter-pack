@@ -11,6 +11,7 @@ let {
 }                   = require('gulp'),
     iconfont        = require('gulp-iconfont'),
     iconfontCss     = require('gulp-iconfont-css'),
+    imagemin        = require('gulp-imagemin'),
     dustJs          = require('dustjs-linkedin'),
     dustHtml        = require('gulp-dust-html'),
     htmlBeautify    = require('gulp-html-beautify'),
@@ -40,6 +41,11 @@ let paths = {
         cfg:  'config/',
         dir:  'assets/icons/',
         dest: 'assets/fonts/dist/',
+    },
+    // Images
+    imgs: {
+        dir:  'assets/images/',
+        dest: 'assets/images/dist/',
     },
     // HTML templates
     html: {
@@ -104,6 +110,27 @@ function iconfontTask() {
         })
         .pipe(dest(paths.icons.dest))
 };
+
+// ---------- Image minify task ---------- //
+
+function imgminTask() {
+    return src([paths.imgs.dir + '*', !paths.imgs.dest + '*'])
+        .pipe(imagemin([
+            imagemin.gifsicle({
+                interlaced: true,
+            }),
+            imagemin.mozjpeg({
+                quality: 75,
+                progressive: true,
+            }),
+            imagemin.optipng({
+                optimizationLevel: 5,
+            }),
+        ], {
+            verbose: true,
+        }))
+        .pipe(dest(paths.imgs.dest))
+}
 
 // ---------- HTML templates task ---------- //
 
@@ -236,6 +263,7 @@ let build       = series(parallel(htmlTask, stylesBuild, jsBuild), watchTask);
 // ---------- Exports tasks ---------- //
 
 exports.iconfont    = iconfontTask;
+exports.imgmin      = imgminTask;
 exports.html        = htmlTask;
 exports.styles      = stylesTask;
 exports.sassLint    = sassLintTask;
