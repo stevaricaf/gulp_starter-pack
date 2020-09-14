@@ -9,6 +9,8 @@ let {
     series,
     parallel
 }                   = require('gulp'),
+    iconfont        = require('gulp-iconfont'),
+    iconfontCss     = require('gulp-iconfont-css'),
     dustJs          = require('dustjs-linkedin'),
     dustHtml        = require('gulp-dust-html'),
     htmlBeautify    = require('gulp-html-beautify'),
@@ -33,20 +35,26 @@ let {
 // ---------- Initializing file destinations ---------- //
 
 let paths = {
+    // Icons
+    icons: {
+        cfg:  'config/',
+        dir:  'assets/icons/',
+        dest: 'assets/fonts/dist',
+    },
     // HTML templates
     html: {
-        dir:  './templates/pages/',
+        dir:  'templates/pages/',
         dest: './'
     },
     // Styles
     styles: {
-        dir:  './scss/',
-        dest: './src/css/',
+        dir:  'scss/',
+        dest: 'src/css/',
     },
     // JavaScript
     js: {
-        dir:  './js/',
-        dest: './src/js/'
+        dir:  'js/',
+        dest: 'src/js/'
     }
 };
 
@@ -57,6 +65,44 @@ let errorNotification = {
         title: "Ops, you've made a mistake, find it...",
         message: 'Error: <%= error.message %>'
     })
+};
+
+// ---------- Iconfont task ---------- //
+
+let runTimestamp = Math.round(Date.now()/1000);
+let fontName = 'font-flat';
+
+function iconfontTask() {
+    return src(paths.icons.dir + '*.svg')
+        .pipe(iconfontCss({
+            // Name that the generated font will have
+            fontName: fontName,
+            // CSS class of fonts (example: class="font-svgName")
+            cssClass: 'font',
+            // Path to the template that will be used to create the SASS/LESS/SCSS/CSS file
+            path: paths.icons.cfg + 'iconfont.scss',
+            // Path where the file will be generated (relative to 'path.styles.dest')
+            targetPath: '../../../' + paths.styles.dir + 'fonts/_iconfont.scss',
+            // Path to the icon font file (relative to 'path.styles.dest')
+            fontPath: '../../../' + paths.icons.dest
+        }))
+        .pipe(iconfont({
+            // Name that the generated font will have
+            fontName: fontName,
+            // Recommended option (true)
+            prependUnicode: true,
+            // Font file formats that will be created
+            formats: ['ttf', 'woff', 'woff2'],
+            // Normalizing font width and height
+            normalize: true,
+            // Recommended to get consistent builds when watching files
+            timestamp: runTimestamp
+        }))
+        .on('glyphs', function(glyphs, options) {
+            // CSS templating, e.g.
+            console.log(glyphs, options);
+        })
+        .pipe(dest(paths.icons.dest))
 };
 
 // ---------- HTML templates task ---------- //
