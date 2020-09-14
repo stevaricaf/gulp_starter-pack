@@ -27,6 +27,9 @@
   },
   "homepage": "https://github.com/stevaricaf/gulp_starter-pack#readme",
   "dependencies": {
-    "gulp": "^4.0.2"
+    "dustjs-linkedin": "^2.7.5",
+    "gulp": "^4.0.2",
+    "gulp-dust-html": "0.0.6",
+    "gulp-html-beautify": "^1.0.1"
   }
 }
