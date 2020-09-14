@@ -17,6 +17,7 @@ let {
     autoprefixer    = require('autoprefixer'),
     flexbugsFixes   = require('postcss-flexbugs-fixes'),
     cssnano         = require('cssnano'),
+    sassLint        = require('gulp-sass-lint'),
     rename          = require('gulp-rename'),
     notify          = require('gulp-notify'),
     plumber         = require('gulp-plumber'),
@@ -115,6 +116,17 @@ function stylesTask() {
         .pipe(dest(paths.styles.dest + 'dist'))
 };
 
+// ---------- Lint script task ---------- //
+
+function sassLintTask() {
+    return src(paths.styles.dir)
+        .pipe(sassLint({
+            config: '.sass-lint.yml'
+        }))
+        .pipe(sassLint.format())
+        .pipe(sassLint.failOnError())
+};
+
 // ---------- JavaScript tasks ---------- //
 
 function jsMainTask() {
@@ -164,14 +176,14 @@ function watchTask() {
     // Watch HTML files
     watch([paths.html.dir + '**/*.html', '!templates/*.html'], htmlTask);
     // Watch SCSS files
-    watch(paths.styles.dir + '**/*.s+(c|a)ss', stylesBuild);
+    watch([paths.styles.dir + '**/*.s+(c|a)ss'], stylesBuild);
     // Watch JS files
     watch([paths.js.dir + '**/*.js', !paths.js.dir + 'libs/**/*.js'], jsBuild);
 };
 
 // ---------- Define complex tasks ---------- //
 
-let stylesBuild = series(stylesTask);
+let stylesBuild = series(stylesTask, sassLintTask);
 let jsBuild     = series(jsMainTask, jsLibsTask, jsMergeTask, jsCleanTask);
 let build       = series(parallel(htmlTask, stylesBuild, jsBuild), watchTask);
 
@@ -179,6 +191,7 @@ let build       = series(parallel(htmlTask, stylesBuild, jsBuild), watchTask);
 
 exports.html        = htmlTask;
 exports.styles      = stylesTask;
+exports.sassLint    = sassLintTask;
 exports.jsMain      = jsMainTask;
 exports.jsLibs      = jsLibsTask;
 exports.jsMerge     = jsMergeTask;
