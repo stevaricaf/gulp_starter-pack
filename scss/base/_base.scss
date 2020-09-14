@@ -1,0 +1,32 @@
+// ---------- Base styles ---------- //
+
+body {
+    font-family: $font-default;
+    font-size: 14px;
+    font-weight: 400;
+    color: $nero;
+    line-height: normal;
+    letter-spacing: normal;
+}
+
+.wrap {
+    @extend %clearfix;
+    width: 100%;
+    max-width: 1440px;
+    height: auto;
+    position: relative;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    height: auto;
+    display: block;
+    position: relative;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}

@@ -1,0 +1,65 @@
+// ---------- Helper classes ---------- //
+
+%clearfix {
+	&::before,
+	&::after {
+		content: '';
+		display: table;
+	}
+	&::after {
+		clear: both;
+	}
+}
+
+.clearfix {
+	@extend %clearfix;
+}
+
+.max-width {
+	width: 100%;
+	max-width: 100%;
+}
+
+.max-height {
+	height: 100%;
+	max-height: 100%;
+}
+
+.cover-bg {
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+%absolute-center-x {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.absolute-center-x {
+	@extend %absolute-center-x;
+}
+
+%absolute-center-y {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translateY(-50%);
+}
+
+.absolute-center-y {
+	@extend %absolute-center-y;
+}
+
+%absolute-center-xy {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateY(-50%, -50%);
+}
+
+.absolute-center-xy {
+	@extend %absolute-center-xy;
+}

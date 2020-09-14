@@ -1,0 +1,29 @@
+// ---------- Responsive breakpoints ---------- //
+
+// To include use @include breakpoint {your value}
+@mixin breakpoint($value) {
+    @if $value == 'touch' {
+        @media only screen and (max-width: 1024px) {
+            @content;
+        }
+    }  @else if $value == 'phone' {
+        @media only screen and (max-width: 768px) {
+            @content;
+        }
+    } @else {
+        @media only screen and (max-width: $value) {
+            @content;
+        }
+    }
+}
+
+// ---------- Hover mixin ---------- //
+
+// (Only for desktop devices!) To include use @include hover {your hover styles}
+@mixin hover {
+    @media only screen and (min-width: 1025px) {
+        .no-touch &:hover {
+            @content;
+        }
+    }
+}

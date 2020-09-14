@@ -1,0 +1,72 @@
+// ---------- Reset styles ---------- //
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 1;
+    &::before,
+    &::after {
+        box-sizing: border-box;
+    }
+}
+
+::selection {
+    background: $nero;
+    color: $white;
+}
+
+// ---------- Link reset styles ----------  //
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:focus,
+a:hover,
+a:active {
+    outline: none;
+}
+
+// ---------- List reset styles---------- //
+
+ul,
+ol,
+dl {
+    list-style: none;
+    list-style-image: none;
+}
+
+// ---------- Form reset styles ---------- //
+
+fieldset,
+form,
+legend {
+    border: none;
+}
+
+label,
+button,
+select {
+    cursor: pointer;
+}
+
+button,
+input,
+textarea {
+    line-height: normal;
+}
+
+textarea {
+    overflow: auto;
+    resize: none;
+}
+
+button,
+input,
+textarea,
+select {
+	appearance: none;
+	outline: none;
+}

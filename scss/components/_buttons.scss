@@ -1,0 +1,26 @@
+// ---------- Button styles ---------- //
+
+button {
+    font-family: $font-default;
+    background: none;
+    border: none;
+}
+
+.btn {
+    width: auto;
+    height: auto;
+    display: block;
+	margin: 20px auto;
+    padding: 15px 30px;
+	font-size: 16px;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+    color: $white;
+    background: $noir;
+    transition: .25s ease-in-out;
+    @include hover {
+        color: $nero;
+        background: $white;
+    }
+}
