@@ -39,7 +39,7 @@ let paths = {
     icons: {
         cfg:  'config/',
         dir:  'assets/icons/',
-        dest: 'assets/fonts/dist',
+        dest: 'assets/fonts/dist/',
     },
     // HTML templates
     html: {
